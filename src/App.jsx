@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import './App.css';
 
 const MEAT_TYPES = {
@@ -6,48 +6,32 @@ const MEAT_TYPES = {
         name: 'Курица',
         baseAmount: 0.35,
         alcoholEffect: 0.1,
-        description: 'Нежное мясо, 5-6 кусочков на шампур (~50г каждый). Усадка при жарке ~10%.'
+        description: 'Нежное мясо, 5-6 кусочков на шампур (~50г каждый). Усадка ~10%.'
     },
     pork: {
         name: 'Свинина',
         baseAmount: 0.4,
         alcoholEffect: 0.15,
-        description: 'Мягкое мясо, 4-5 кусков на шампур (~60г). Усадка ~15%.'
+        description: '4-5 кусков на шампур (~60г). Усадка ~15%.'
     },
     beef: {
         name: 'Говядина',
         baseAmount: 0.45,
         alcoholEffect: 0.2,
-        description: 'Плотное мясо, 3-4 куска на шампур (~70г). Усадка ~20%.'
+        description: '3-4 куска на шампур (~70г). Усадка ~20%.'
     },
     lamb: {
         name: 'Баранина',
         baseAmount: 0.5,
         alcoholEffect: 0.25,
-        description: 'Жирное мясо, 2-3 крупных куска на шампур (~90г). Усадка ~25%.'
+        description: '2-3 крупных куска на шампур (~90г). Усадка ~25%.'
     }
 };
 
-const SKEWER_WEIGHT = 0.2; // 200г на шампур
-const ACTIVE_EATER_BONUS = 0.3; // +30% для активных едоков
+const SKEWER_WEIGHT = 0.2;
+const ACTIVE_EATER_FACTOR = 0.3;
 
-const InputField = ({ label, value, onChange, min, max, type = 'number', ...props }) => (
-    <div className="input-block">
-        <label>
-            <div>{label}</div>
-            <input
-                type={type}
-                value={value}
-                onChange={onChange}
-                min={min}
-                max={max}
-                {...props}
-            />
-        </label>
-    </div>
-);
-
-const MeatCalculator = () => {
+function App() {
     const [state, setState] = useState({
         people: 5,
         activePeople: 3,
@@ -56,21 +40,23 @@ const MeatCalculator = () => {
         meatType: 'pork'
     });
 
-    const handleChange = (field) => (e) => {
-        const value = e.target.type === 'number' ? parseInt(e.target.value) || 0 : e.target.value;
-        setState(prev => ({
-            ...prev,
-            [field]: field === 'activePeople' ? Math.min(value, state.people) : value
-        }));
-    };
+    const [darkMode, setDarkMode] = useState(false);
+
+    useEffect(() => {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        const handler = (e) => setDarkMode(e.matches);
+
+        setDarkMode(mediaQuery.matches);
+        mediaQuery.addEventListener('change', handler);
+
+        return () => mediaQuery.removeEventListener('change', handler);
+    }, []);
 
     const { meat, skewers, meatTypeName, meatDescription } = useMemo(() => {
-        const { people, activePeople, vodka, beer, meatType } = state;
-        const config = MEAT_TYPES[meatType];
-
-        const baseMeat = people * config.baseAmount;
-        const activeBonus = activePeople * config.baseAmount * ACTIVE_EATER_BONUS;
-        const alcoholEffect = vodka * config.alcoholEffect + beer * (config.alcoholEffect / 2);
+        const config = MEAT_TYPES[state.meatType];
+        const baseMeat = state.people * config.baseAmount;
+        const activeBonus = state.activePeople * config.baseAmount * ACTIVE_EATER_FACTOR;
+        const alcoholEffect = state.vodka * config.alcoholEffect + state.beer * (config.alcoholEffect / 2);
         const totalMeat = baseMeat + activeBonus + alcoholEffect;
 
         return {
@@ -81,85 +67,109 @@ const MeatCalculator = () => {
         };
     }, [state]);
 
+    const handleChange = (field) => (e) => {
+        const value = e.target.type === 'number'
+            ? Math.max(0, parseInt(e.target.value) || 0)
+            : e.target.value;
+
+        setState(prev => ({
+            ...prev,
+            [field]: field === 'activePeople' ? Math.min(value, state.people) : value
+        }));
+    };
+
     return (
-        <div className="app">
-            <h1>🍢 Калькулятор шашлыка</h1>
+        <div className={`app ${darkMode ? 'dark-theme' : ''}`}>
+            <div className="calculator-container">
+                <h1>🍢 Калькулятор шашлыка</h1>
 
-            <div className="input-grid">
-                <InputField
-                    label="Количество людей"
-                    value={state.people}
-                    onChange={handleChange('people')}
-                    min="1"
-                />
+                <div className="input-grid">
+                    <div className="input-block">
+                        <label>
+                            <span>👫 Количество людей</span>
+                            <input
+                                type="number"
+                                value={state.people}
+                                onChange={handleChange('people')}
+                                min="1"
+                            />
+                        </label>
+                    </div>
 
-                <InputField
-                    label="Кто много кушает"
-                    value={state.activePeople}
-                    onChange={handleChange('activePeople')}
-                    min="0"
-                    max={state.people}
-                />
+                    <div className="input-block">
+                        <label>
+                            <span>Сколько едят больше?</span>
+                            <input
+                                type="number"
+                                value={state.activePeople}
+                                onChange={handleChange('activePeople')}
+                                min="0"
+                                max={state.people}
+                            />
+                        </label>
+                    </div>
 
-                <div className="input-block">
-                    <label>
-                        <div>Тип мяса</div>
-                        <select
-                            value={state.meatType}
-                            onChange={handleChange('meatType')}
-                        >
-                            {Object.entries(MEAT_TYPES).map(([key, { name }]) => (
-                                <option key={key} value={key}>{name}</option>
-                            ))}
-                        </select>
-                    </label>
+                    <div className="input-block">
+                        <label>
+                            <span>🍖 Тип мяса</span>
+                            <select
+                                value={state.meatType}
+                                onChange={handleChange('meatType')}
+                            >
+                                {Object.entries(MEAT_TYPES).map(([key, { name }]) => (
+                                    <option key={key} value={key}>{name}</option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+
+                    <div className="input-block">
+                        <label>
+                            <span>🍶 Водка (0.5л)</span>
+                            <input
+                                type="number"
+                                value={state.vodka}
+                                onChange={handleChange('vodka')}
+                                min="0"
+                            />
+                        </label>
+                    </div>
+
+                    <div className="input-block">
+                        <label>
+                            <span>🍺 Пиво (0.5л)</span>
+                            <input
+                                type="number"
+                                value={state.beer}
+                                onChange={handleChange('beer')}
+                                min="0"
+                            />
+                        </label>
+                    </div>
                 </div>
 
-                <InputField
-                    label="Водка (0.5л)"
-                    value={state.vodka}
-                    onChange={handleChange('vodka')}
-                    min="0"
-                />
-
-                <InputField
-                    label="Пиво (0.5л)"
-                    value={state.beer}
-                    onChange={handleChange('beer')}
-                    min="0"
-                />
-            </div>
-
-            <div className="result-block">
-                <h2>Результаты расчета</h2>
-
-                <div className="result-item">
-                    <span>Мяса ({meatTypeName}):</span>
-                    <strong>{meat} кг</strong>
-                </div>
-
-                <div className="result-item tooltip-container">
-                    <span>Шампуров (по 200г):</span>
-                    <strong>{skewers} шт</strong>
-                    <div className="tooltip">
-                        <h3>{meatTypeName}</h3>
-                        <p>{meatDescription}</p>
-                        <div className="stats">
-                            <p><strong>На человека:</strong> {MEAT_TYPES[state.meatType].baseAmount} кг</p>
-                            <p><strong>Алкоголь:</strong> +{MEAT_TYPES[state.meatType].alcoholEffect} кг/водки</p>
-                            <p><strong>Всего мяса:</strong> {meat} кг</p>
+                <div className="result-block">
+                    <h2>Результаты</h2>
+                    <div className="result-item">
+                        <span>Мяса ({meatTypeName}):</span>
+                        <strong>{meat} кг</strong>
+                    </div>
+                    <div className="result-item tooltip-container">
+                        <span>Шампуров (по 200г):</span>
+                        <strong>{skewers} шт</strong>
+                        <div className="tooltip">
+                            <h3>{meatTypeName}</h3>
+                            <p>{meatDescription}</p>
+                            <div className="stats">
+                                <p><strong>На человека:</strong> {MEAT_TYPES[state.meatType].baseAmount} кг</p>
+                                <p><strong>Алкогольный эффект:</strong> +{MEAT_TYPES[state.meatType].alcoholEffect} кг/бутылка водки</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                {state.vodka > 2 && (
-                    <div className="warning">
-                        ⚠️ При {state.vodka} бутылках водки сделайте запас мяса +10-15%!
-                    </div>
-                )}
             </div>
         </div>
     );
-};
+}
 
-export default MeatCalculator;
+export default App;

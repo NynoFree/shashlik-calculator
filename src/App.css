@@ -1,119 +1,172 @@
-/* Основные стили приложения */
-.app {
-  max-width: 500px;
-  margin: 20px auto;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+:root {
+  /* Light Theme */
+  --bg-color: #f8f9fa;
+  --text-color: #212529;
+  --card-bg: #ffffff;
+  --input-bg: #ffffff;
+  --border-color: #ced4da;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --result-bg: #e9ecef;
+  --primary-color: #fd7e14;
+  --tooltip-bg: #ffffff;
+  --border-radius: 12px;
 }
 
-/* Заголовок */
+.dark-theme {
+  /* Dark Theme */
+  --bg-color: #1a1a1a;
+  --text-color: #f8f9fa;
+  --card-bg: #2b2b2b;
+  --input-bg: #3a3a3a;
+  --border-color: #495057;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --result-bg: #343a40;
+  --primary-color: #ff922b;
+  --tooltip-bg: #3a3a3a;
+}
+
+/* Базовые стили */
+.app-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 24px;
+  background-color: var(--bg-color);
+  transition: all 0.3s ease;
+}
+
+.calculator-container {
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 28px;
+  transition: all 0.3s ease;
+}
+
+/* Типографика */
 h1 {
+  font-size: 1.8rem;
   text-align: center;
-  color: #d35400;
-  margin-bottom: 25px;
-  font-size: 1.8em;
+  margin: 0 0 28px 0;
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
-/* Сетка для полей ввода */
+h2 {
+  font-size: 1.4rem;
+  margin: 0 0 20px 0;
+  color: var(--primary-color);
+}
+
+/* Сетка и отступы */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: 18px;
+  margin-bottom: 24px;
 }
 
-/* Блоки ввода */
 .input-block {
-  margin-bottom: 10px;
+  margin-bottom: 18px;
 }
 
-.input-block label div {
-  margin-bottom: 6px;
-  font-weight: bold;
-  color: #555;
-  font-size: 0.95em;
+.input-block label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-color);
 }
 
-.input-block input,
-.input-block select {
+/* Формы */
+input,
+select {
   width: 100%;
-  padding: 10px;
-  font-size: 15px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  box-sizing: border-box;
-  background-color: white;
-  transition: border-color 0.3s;
+  padding: 10px 3px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
 
-.input-block input:focus,
-.input-block select:focus {
+input:focus,
+select:focus {
   outline: none;
-  border-color: #e67e22;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.25);
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.dark-theme select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23adb5bd'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
 }
 
 /* Блок результатов */
 .result-block {
-  margin-top: 30px;
+  margin-top: 28px;
   padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  border: 1px solid #eee;
+  background-color: var(--result-bg);
+  border-radius: var(--border-radius);
 }
 
-.result-block h2 {
-  margin-top: 0;
-  text-align: center;
-  color: #333;
-  font-size: 1.3em;
-  margin-bottom: 15px;
-}
-
-/* Элементы результатов */
 .result-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 15px;
-  margin: 8px 0;
-  background-color: #f0f0f0;
-  border-radius: 6px;
-  font-size: 16px;
-}
-
-.result-item span {
-  color: #555;
+  padding: 14px 16px;
+  margin: 12px 0;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  font-size: 1.05rem;
 }
 
 .result-item strong {
-  color: #e67e22;
-  font-weight: bold;
+  color: var(--primary-color);
+  font-weight: 600;
 }
 
-/* Контейнер для подсказки */
+/* Подсказка */
 .tooltip-container {
   position: relative;
 }
 
-/* Стили подсказки */
 .tooltip {
   position: absolute;
-  z-index: 100;
-  width: 300px;
-  bottom: calc(100% + 10px);
+  width: 280px;
+  bottom: calc(100% + 12px);
   left: 50%;
   transform: translateX(-50%);
-  padding: 15px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-size: 14px;
+  padding: 16px;
+  background-color: var(--tooltip-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.tooltip h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+}
+
+.tooltip p {
+  margin: 0 0 12px 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
 }
 
 .tooltip-container:hover .tooltip {
@@ -121,64 +174,34 @@ h1 {
   visibility: visible;
 }
 
-.tooltip h3 {
-  margin-top: 0;
-  margin-bottom: 10px;
-  color: #e67e22;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 8px;
-  font-size: 1.1em;
-}
-
-.tooltip p {
-  margin: 8px 0;
-  line-height: 1.5;
-  color: #555;
-}
-
-.stats {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px dashed #ddd;
-}
-
-.stats p {
-  margin: 5px 0;
-  font-size: 13px;
-  color: #666;
-}
-
-.stats strong {
-  color: #333;
-  font-weight: bold;
-}
-
-/* Предупреждения */
-.warning {
-  margin-top: 15px;
-  padding: 10px;
-  background-color: #ffeaa7;
-  border-radius: 5px;
-  text-align: center;
-  color: #d63031;
-  font-size: 14px;
-  border-left: 3px solid #d63031;
-}
-
-/* Адаптация для мобильных */
+/* Адаптивность */
 @media (max-width: 600px) {
-  .app {
-    margin: 10px;
-    padding: 15px;
+  .app-container {
+    padding: 16px;
+    align-items: center;
+  }
+
+  .calculator-container {
+    padding: 20px;
   }
 
   .input-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .tooltip {
-    width: 250px;
-    left: 0;
-    transform: none;
+    width: 240px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 400px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .calculator-container {
+    padding: 16px;
   }
 }
