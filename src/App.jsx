@@ -87,14 +87,14 @@ const MeatCalculator = () => {
 
             <div className="input-grid">
                 <InputField
-                    label="👫 Количество людей"
+                    label="Количество людей"
                     value={state.people}
                     onChange={handleChange('people')}
                     min="1"
                 />
 
                 <InputField
-                    label="🏃 Активные едоки"
+                    label="Кто много кушает"
                     value={state.activePeople}
                     onChange={handleChange('activePeople')}
                     min="0"
@@ -103,7 +103,7 @@ const MeatCalculator = () => {
 
                 <div className="input-block">
                     <label>
-                        <div>🍖 Тип мяса</div>
+                        <div>Тип мяса</div>
                         <select
                             value={state.meatType}
                             onChange={handleChange('meatType')}
@@ -116,14 +116,14 @@ const MeatCalculator = () => {
                 </div>
 
                 <InputField
-                    label="🍶 Водка (0.5л)"
+                    label="Водка (0.5л)"
                     value={state.vodka}
                     onChange={handleChange('vodka')}
                     min="0"
                 />
 
                 <InputField
-                    label="🍺 Пиво (0.5л)"
+                    label="Пиво (0.5л)"
                     value={state.beer}
                     onChange={handleChange('beer')}
                     min="0"
