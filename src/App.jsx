@@ -79,14 +79,14 @@ function App() {
     };
 
     return (
-        <div className={`app ${darkMode ? 'dark-theme' : ''}`}>
-            <div className="calculator-container">
+        <div className={`app-container ${darkMode ? 'dark-theme' : ''}`}>
+            <div className="calculator">
                 <h1>🍢 Калькулятор шашлыка</h1>
 
                 <div className="input-grid">
                     <div className="input-block">
                         <label>
-                            <span>👫 Количество людей</span>
+                            <span>👫 Люди</span>
                             <input
                                 type="number"
                                 value={state.people}
@@ -98,7 +98,7 @@ function App() {
 
                     <div className="input-block">
                         <label>
-                            <span>Сколько едят больше?</span>
+                            <span>🏃 Активные</span>
                             <input
                                 type="number"
                                 value={state.activePeople}
@@ -111,7 +111,7 @@ function App() {
 
                     <div className="input-block">
                         <label>
-                            <span>🍖 Тип мяса</span>
+                            <span>🍖 Мясо</span>
                             <select
                                 value={state.meatType}
                                 onChange={handleChange('meatType')}
@@ -125,7 +125,7 @@ function App() {
 
                     <div className="input-block">
                         <label>
-                            <span>🍶 Водка (0.5л)</span>
+                            <span>🍶 Водка</span>
                             <input
                                 type="number"
                                 value={state.vodka}
@@ -137,7 +137,7 @@ function App() {
 
                     <div className="input-block">
                         <label>
-                            <span>🍺 Пиво (0.5л)</span>
+                            <span>🍺 Пиво</span>
                             <input
                                 type="number"
                                 value={state.beer}
@@ -151,20 +151,12 @@ function App() {
                 <div className="result-block">
                     <h2>Результаты</h2>
                     <div className="result-item">
-                        <span>Мяса ({meatTypeName}):</span>
-                        <strong>{meat} кг</strong>
+                        <span>Мяса:</span>
+                        <strong>{meat} кг ({meatTypeName})</strong>
                     </div>
-                    <div className="result-item tooltip-container">
-                        <span>Шампуров (по 200г):</span>
-                        <strong>{skewers} шт</strong>
-                        <div className="tooltip">
-                            <h3>{meatTypeName}</h3>
-                            <p>{meatDescription}</p>
-                            <div className="stats">
-                                <p><strong>На человека:</strong> {MEAT_TYPES[state.meatType].baseAmount} кг</p>
-                                <p><strong>Алкогольный эффект:</strong> +{MEAT_TYPES[state.meatType].alcoholEffect} кг/бутылка водки</p>
-                            </div>
-                        </div>
+                    <div className="result-item">
+                        <span>Шампуров:</span>
+                        <strong>{skewers} шт (по 200г)</strong>
                     </div>
                 </div>
             </div>

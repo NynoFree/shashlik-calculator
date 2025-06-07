@@ -5,11 +5,10 @@
   --card-bg: #ffffff;
   --input-bg: #ffffff;
   --border-color: #ced4da;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --result-bg: #e9ecef;
   --primary-color: #fd7e14;
-  --tooltip-bg: #ffffff;
-  --border-radius: 12px;
+  --border-radius: 8px;
 }
 
 .dark-theme {
@@ -19,104 +18,109 @@
   --card-bg: #2b2b2b;
   --input-bg: #3a3a3a;
   --border-color: #495057;
-  --shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   --result-bg: #343a40;
   --primary-color: #ff922b;
-  --tooltip-bg: #3a3a3a;
 }
 
-/* Базовые стили */
+/* Base Styles */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
 .app-container {
   display: flex;
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  padding: 24px;
+  padding: 16px;
   background-color: var(--bg-color);
   transition: all 0.3s ease;
 }
 
-.calculator-container {
+/* Calculator Container */
+.calculator {
   width: 100%;
-  max-width: 480px;
+  max-width: 400px;
   background-color: var(--card-bg);
   border-radius: var(--border-radius);
   box-shadow: var(--shadow);
-  padding: 28px;
+  padding: 20px;
   transition: all 0.3s ease;
 }
 
-/* Типографика */
+/* Typography */
 h1 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   text-align: center;
-  margin: 0 0 28px 0;
-  color: var(--primary-color);
-  font-weight: 600;
-}
-
-h2 {
-  font-size: 1.4rem;
   margin: 0 0 20px 0;
   color: var(--primary-color);
 }
 
-/* Сетка и отступы */
+h2 {
+  font-size: 1.2rem;
+  margin: 0 0 16px 0;
+  color: var(--primary-color);
+}
+
+/* Input Grid */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
 .input-block {
-  margin-bottom: 18px;
+  margin-bottom: 12px;
 }
 
 .input-block label {
   display: block;
-  margin-bottom: 8px;
-  font-size: 0.95rem;
+  margin-bottom: 4px;
+  font-size: 0.8rem;
   font-weight: 500;
   color: var(--text-color);
 }
 
-/* Формы */
+.input-block span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Form Elements */
 input,
 select {
   width: 100%;
-  padding: 10px 3px;
+  padding: 6px 10px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 4px;
   background-color: var(--input-bg);
   color: var(--text-color);
-  font-size: 1rem;
-  transition: all 0.2s ease;
-}
-
-input:focus,
-select:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(253, 126, 20, 0.25);
+  font-size: 0.9rem;
+  height: 32px;
+  box-sizing: border-box;
 }
 
 select {
   appearance: none;
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236c757d'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
+  background-position: right 8px center;
+  background-size: 12px;
+  padding-right: 28px;
 }
 
 .dark-theme select {
   background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23adb5bd'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
 }
 
-/* Блок результатов */
+/* Results Block */
 .result-block {
-  margin-top: 28px;
-  padding: 20px;
+  margin-top: 20px;
+  padding: 16px;
   background-color: var(--result-bg);
   border-radius: var(--border-radius);
 }
@@ -124,84 +128,28 @@ select {
 .result-item {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 14px 16px;
-  margin: 12px 0;
-  background-color: var(--card-bg);
-  border-radius: 8px;
-  font-size: 1.05rem;
+  padding: 8px 0;
+  font-size: 0.95rem;
 }
 
 .result-item strong {
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 500;
 }
 
-/* Подсказка */
-.tooltip-container {
-  position: relative;
-}
-
-.tooltip {
-  position: absolute;
-  width: 280px;
-  bottom: calc(100% + 12px);
-  left: 50%;
-  transform: translateX(-50%);
-  padding: 16px;
-  background-color: var(--tooltip-bg);
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.2s ease;
-  z-index: 100;
-}
-
-.tooltip h3 {
-  margin: 0 0 8px 0;
-  font-size: 1.1rem;
-}
-
-.tooltip p {
-  margin: 0 0 12px 0;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.tooltip-container:hover .tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Адаптивность */
-@media (max-width: 600px) {
-  .app-container {
-    padding: 16px;
-    align-items: center;
-  }
-
-  .calculator-container {
-    padding: 20px;
-  }
-
+/* Responsive */
+@media (max-width: 480px) {
   .input-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 10px;
   }
 
-  .tooltip {
-    width: 240px;
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 400px) {
-  h1 {
-    font-size: 1.5rem;
-  }
-
-  .calculator-container {
+  .calculator {
     padding: 16px;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+    margin-bottom: 16px;
   }
 }
